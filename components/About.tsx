@@ -4,6 +4,13 @@ import { EditableText, EditableImage } from './Editable';
 import { Button } from './Button';
 
 export const About: React.FC = () => {
+  const handleScrollToServices = () => {
+    const element = document.getElementById('services');
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return (
     <section id="about" className="py-24 bg-white overflow-hidden relative">
       {/* Elementos decorativos de fundo */}
@@ -53,12 +60,14 @@ export const About: React.FC = () => {
             </div>
 
             {/* Botão de Navegação Funcional */}
-            <a href="#services">
-              <Button variant="secondary" className="group">
+            <Button 
+                variant="secondary" 
+                className="group"
+                onClick={handleScrollToServices}
+            >
                 Ver como posso ajudar
                 <ArrowDown className="w-4 h-4 group-hover:translate-y-1 transition-transform" />
-              </Button>
-            </a>
+            </Button>
           </div>
 
           {/* Coluna da Direita: Imagem de Corpo Inteiro */}
