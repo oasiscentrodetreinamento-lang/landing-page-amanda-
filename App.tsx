@@ -23,7 +23,7 @@ const AdminBar = () => {
   };
 
   return (
-    <div className="bg-amanda-dark text-white text-xs md:text-sm py-3 px-6 fixed top-0 w-full z-[100] shadow-lg flex justify-between items-center border-b border-white/10">
+    <div className="bg-amanda-dark text-white text-xs md:text-sm py-3 px-6 fixed top-0 w-full z-[110] shadow-lg flex justify-between items-center border-b border-white/10">
       <div className="flex items-center gap-3">
         <span className="w-2.5 h-2.5 bg-green-500 rounded-full animate-pulse shadow-[0_0_8px_rgba(34,197,94,0.6)]"></span>
         <span className="font-bold tracking-wide">MODO EDIÇÃO ATIVO</span>

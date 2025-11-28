@@ -76,7 +76,7 @@ export const About: React.FC = () => {
                     section="about" 
                     field="imageMain" 
                     alt="Amanda Guimarães" 
-                    className="w-full h-full object-cover lg:object-contain object-bottom drop-shadow-2xl mask-image-gradient"
+                    className="w-full h-full object-cover lg:object-contain object-bottom drop-shadow-2xl rounded-[40px]"
                  />
                  
                  {/* Card Flutuante Decorativo */}

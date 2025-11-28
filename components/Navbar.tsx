@@ -20,6 +20,16 @@ export const Navbar: React.FC = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, targetId: string) => {
+    e.preventDefault();
+    setIsMobileMenuOpen(false);
+    
+    const element = document.querySelector(targetId);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   const navLinks = [
     { name: 'Início', href: '#home' },
     { name: 'Sobre Mim', href: '#about' },
@@ -31,20 +41,22 @@ export const Navbar: React.FC = () => {
 
   return (
     <nav 
-      className={`fixed w-full z-50 transition-all duration-500 ${
+      className={`fixed w-full z-[100] transition-all duration-500 ${
         isScrolled ? 'bg-white/95 backdrop-blur-sm shadow-lg py-4' : 'bg-transparent py-6'
       }`}
     >
       <div className="container mx-auto px-6 flex justify-between items-center">
         {/* Logo Area - Inicialmente invisível, aparece via Fade In */}
-        <div 
-          className={`flex items-center gap-2 font-serif font-bold text-2xl transition-opacity duration-500 ${
+        <a 
+          href="#home" 
+          onClick={(e) => handleNavClick(e, '#home')}
+          className={`flex items-center gap-2 font-serif font-bold text-2xl transition-opacity duration-500 cursor-pointer ${
             showLogo ? 'opacity-100' : 'opacity-0'
           } ${isScrolled ? 'text-amanda-dark' : 'text-white'}`}
         >
           <Dumbbell className="w-8 h-8 text-amanda-accent" />
           <span>Amanda G.</span>
-        </div>
+        </a>
 
         {/* Desktop Menu */}
         <div className="hidden md:flex items-center gap-8">
@@ -52,7 +64,8 @@ export const Navbar: React.FC = () => {
             <a 
               key={link.name} 
               href={link.href}
-              className={`font-medium hover:text-amanda-accent transition-colors ${
+              onClick={(e) => handleNavClick(e, link.href)}
+              className={`font-medium hover:text-amanda-accent transition-colors cursor-pointer ${
                 isScrolled ? 'text-gray-600' : 'text-white/90 hover:text-white'
               }`}
             >
@@ -63,7 +76,7 @@ export const Navbar: React.FC = () => {
             href={whatsappLink}
             target="_blank"
             rel="noreferrer"
-            className={`px-6 py-2 rounded-full font-bold transition-all ${
+            className={`px-6 py-2 rounded-full font-bold transition-all cursor-pointer ${
               isScrolled 
                 ? 'bg-amanda-accent text-white hover:bg-rose-700' 
                 : 'bg-white text-amanda-dark hover:bg-rose-50'
@@ -75,7 +88,7 @@ export const Navbar: React.FC = () => {
 
         {/* Mobile Menu Button */}
         <button 
-          className="md:hidden text-amanda-dark z-50"
+          className="md:hidden text-amanda-dark z-[101]"
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
         >
           {isMobileMenuOpen ? <X className={isScrolled ? 'text-gray-800' : 'text-white'} /> : <Menu className={isScrolled ? 'text-gray-800' : 'text-white'} />}
@@ -84,13 +97,13 @@ export const Navbar: React.FC = () => {
 
       {/* Mobile Menu Dropdown */}
       {isMobileMenuOpen && (
-        <div className="md:hidden absolute top-0 left-0 w-full h-screen bg-white/95 backdrop-blur-xl shadow-xl py-20 px-6 flex flex-col gap-6 animate-fade-in">
+        <div className="md:hidden absolute top-0 left-0 w-full h-screen bg-white/95 backdrop-blur-xl shadow-xl py-20 px-6 flex flex-col gap-6 animate-fade-in z-[99]">
           {navLinks.map((link) => (
             <a 
               key={link.name} 
               href={link.href}
-              className="text-amanda-dark font-serif text-3xl font-bold border-b border-gray-100 pb-4"
-              onClick={() => setIsMobileMenuOpen(false)}
+              onClick={(e) => handleNavClick(e, link.href)}
+              className="text-amanda-dark font-serif text-3xl font-bold border-b border-gray-100 pb-4 cursor-pointer"
             >
               {link.name}
             </a>
@@ -100,7 +113,7 @@ export const Navbar: React.FC = () => {
             target="_blank"
             rel="noreferrer"
             onClick={() => setIsMobileMenuOpen(false)}
-            className="text-center bg-amanda-accent text-white py-4 rounded-xl font-bold text-xl mt-4"
+            className="text-center bg-amanda-accent text-white py-4 rounded-xl font-bold text-xl mt-4 cursor-pointer"
           >
             Falar Comigo
           </a>

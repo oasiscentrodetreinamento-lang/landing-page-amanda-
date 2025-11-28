@@ -176,7 +176,9 @@ export const EditableImage: React.FC<EditableImageProps> = ({ section, field, cl
                      <Upload size={16} />
                      Upload do Computador
                    </button>
-                   <p className="text-[10px] text-gray-400 mt-1 text-center">Recomendado: Imagens leves (max 800kb)</p>
+                   <p className="text-[10px] text-gray-400 mt-1 text-center">
+                      Recomendado: 800x1200px (PNG Transparente) • Máx 800kb
+                   </p>
                  </div>
 
                  <div className="relative flex py-1 items-center">
