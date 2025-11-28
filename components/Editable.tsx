@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useRef } from 'react';
 import { useContent } from '../contexts/ContentContext';
 import { SiteContent } from '../types';
-import { Edit2, Image as ImageIcon, Check, X, Save } from 'lucide-react';
+import { Edit2, Image as ImageIcon, Check, X, Save, Upload, AlertTriangle } from 'lucide-react';
 
 interface EditableTextProps {
   section: keyof SiteContent;
@@ -95,6 +95,8 @@ export const EditableImage: React.FC<EditableImageProps> = ({ section, field, cl
   const { content, updateContent, isAdmin } = useContent();
   const [isEditing, setIsEditing] = useState(false);
   const [tempValue, setTempValue] = useState('');
+  const [errorMsg, setErrorMsg] = useState('');
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   // @ts-ignore
   const value = content[section][field];
@@ -103,12 +105,38 @@ export const EditableImage: React.FC<EditableImageProps> = ({ section, field, cl
     if (!isAdmin) return;
     e.preventDefault();
     setTempValue(value);
+    setErrorMsg('');
     setIsEditing(true);
   };
 
   const handleSave = () => {
     updateContent(section, field, tempValue);
     setIsEditing(false);
+  };
+
+  const handleFileClick = () => {
+    fileInputRef.current?.click();
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      // Limite de tamanho (aprox 800KB) para não estourar o LocalStorage
+      // Strings Base64 são 33% maiores que o arquivo original
+      if (file.size > 800 * 1024) {
+        setErrorMsg('A imagem é muito grande! Use imagens menores que 800KB para não pesar o site.');
+        return;
+      }
+      
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        if (typeof reader.result === 'string') {
+          setTempValue(reader.result);
+          setErrorMsg('');
+        }
+      };
+      reader.readAsDataURL(file);
+    }
   };
 
   return (
@@ -125,23 +153,69 @@ export const EditableImage: React.FC<EditableImageProps> = ({ section, field, cl
                <ImageIcon size={16} /> Alterar Imagem
              </button>
            ) : (
-             <div className="bg-white p-4 rounded-xl w-[90%] max-w-sm shadow-2xl animate-fade-in-up">
-               <div className="flex justify-between items-center mb-2">
-                 <label className="text-xs font-bold text-gray-500 uppercase tracking-wide">URL da Nova Imagem</label>
+             <div className="bg-white p-4 rounded-xl w-[90%] max-w-sm shadow-2xl animate-fade-in-up cursor-default" onClick={(e) => e.stopPropagation()}>
+               <div className="flex justify-between items-center mb-4 border-b border-gray-100 pb-2">
+                 <label className="text-xs font-bold text-gray-500 uppercase tracking-wide">Editar Imagem</label>
                  <button onClick={() => setIsEditing(false)} className="text-gray-400 hover:text-red-500"><X size={16} /></button>
                </div>
-               <input 
-                 type="text" 
-                 value={tempValue}
-                 onChange={(e) => setTempValue(e.target.value)}
-                 className="w-full border border-gray-300 rounded p-2 text-sm mb-3 text-black focus:ring-2 focus:ring-amanda-accent focus:border-transparent outline-none"
-                 placeholder="https://exemplo.com/imagem.jpg"
-                 autoFocus
-               />
-               <div className="flex gap-2 justify-end">
-                 <button onClick={handleSave} className="flex items-center gap-2 bg-amanda-accent text-white text-sm px-4 py-2 rounded font-bold hover:bg-rose-600 transition-colors w-full justify-center">
-                   <Save size={16} /> Salvar Alteração
-                 </button>
+               
+               <div className="space-y-4">
+                 {/* Opção 1: Upload */}
+                 <div>
+                   <input 
+                     type="file" 
+                     ref={fileInputRef}
+                     className="hidden" 
+                     accept="image/*"
+                     onChange={handleFileChange}
+                   />
+                   <button 
+                     onClick={handleFileClick}
+                     className="w-full flex items-center justify-center gap-2 bg-gray-100 text-gray-700 py-3 rounded-lg hover:bg-gray-200 transition-colors border-2 border-dashed border-gray-300 hover:border-amanda-accent"
+                   >
+                     <Upload size={16} />
+                     Upload do Computador
+                   </button>
+                   <p className="text-[10px] text-gray-400 mt-1 text-center">Recomendado: Imagens leves (max 800kb)</p>
+                 </div>
+
+                 <div className="relative flex py-1 items-center">
+                    <div className="flex-grow border-t border-gray-200"></div>
+                    <span className="flex-shrink-0 mx-2 text-gray-300 text-xs">OU URL EXTERNA</span>
+                    <div className="flex-grow border-t border-gray-200"></div>
+                 </div>
+
+                 {/* Opção 2: URL */}
+                 <div>
+                   <input 
+                     type="text" 
+                     value={tempValue}
+                     onChange={(e) => setTempValue(e.target.value)}
+                     className="w-full border border-gray-300 rounded p-2 text-sm text-black focus:ring-2 focus:ring-amanda-accent focus:border-transparent outline-none"
+                     placeholder="https://..."
+                   />
+                 </div>
+
+                 {/* Preview Area */}
+                 {tempValue && (
+                   <div className="relative w-full h-32 rounded-lg overflow-hidden border border-gray-200 bg-gray-50">
+                     <img src={tempValue} className="w-full h-full object-cover opacity-50" alt="Preview" />
+                     <div className="absolute inset-0 flex items-center justify-center font-bold text-gray-600 bg-white/50">PREVIEW</div>
+                   </div>
+                 )}
+
+                 {errorMsg && (
+                   <div className="flex items-start gap-2 text-red-500 text-xs bg-red-50 p-2 rounded">
+                     <AlertTriangle size={12} className="mt-0.5 shrink-0" />
+                     <span>{errorMsg}</span>
+                   </div>
+                 )}
+
+                 <div className="flex gap-2 justify-end pt-2">
+                   <button onClick={handleSave} className="flex items-center gap-2 bg-amanda-accent text-white text-sm px-4 py-2 rounded-lg font-bold hover:bg-rose-600 transition-colors w-full justify-center shadow-lg shadow-rose-200">
+                     <Save size={16} /> Salvar Alteração
+                   </button>
+                 </div>
                </div>
              </div>
            )}

@@ -2,23 +2,22 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 import { SiteContent, ContentContextType } from '../types';
 
 // CONTEÚDO PADRÃO
-// Se você usar o botão "Exportar Configuração" na área restrita, 
-// substitua este objeto abaixo pelo JSON copiado para atualizar o site para todos.
+// Atualizado para focar no nome da Personal como marca principal e perfil de Estagiária
 const defaultContent: SiteContent = {
   hero: {
-    badge: "PERSONAL TRAINER EXCLUSIVA PARA MULHERES",
-    titlePart1: "Revele a sua",
-    titlePart2: "melhor versão",
-    description: "Metodologia única focada em emagrecimento, definição e resgate da autoestima feminina. Treinos personalizados que se adaptam à sua rotina.",
-    buttonText: "Consultoria Online",
+    badge: "ESTUDANTE DE EDUCAÇÃO FÍSICA",
+    titlePart1: "Amanda",
+    titlePart2: "Guimarães",
+    description: "Apaixonada pelo movimento e dedicada a ajudar você a executar seu treino com segurança e eficiência máxima.",
+    buttonText: "Entrar em Contato",
     bgImage: "https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?q=80&w=2070&auto=format&fit=crop"
   },
   about: {
-    title: "Olá, eu sou a Amanda",
-    p1: "Com mais de 8 anos de experiência transformando vidas, minha missão vai além da estética. Eu ajudo mulheres a se reconectarem com seus corpos através de uma rotina de exercícios equilibrada e eficiente.",
-    p2: "Acredito que o treino deve ser um momento de autocuidado, não de punição. Minha metodologia combina ciência do treinamento com a sensibilidade necessária para entender o corpo feminino.",
-    image1: "https://images.unsplash.com/photo-1583454110551-21f2fa2afe61?q=80&w=1000&auto=format&fit=crop",
-    image2: "https://images.unsplash.com/photo-1518611012118-696072aa579a?q=80&w=1000&auto=format&fit=crop"
+    subtitle: "SOBRE A AMANDA",
+    title: "Em formação constante pela excelência",
+    p1: "Minha jornada na Educação Física é movida pela paixão em entender como o corpo humano funciona. Atualmente estou no período de estágio, onde transformo teoria em prática todos os dias no salão de musculação.",
+    p2: "Acredito que um bom profissional se faz com estudo contínuo e atenção aos detalhes. Meu foco é corrigir sua biomecânica e garantir que cada exercício seja executado com a máxima segurança para gerar resultados reais.",
+    imageMain: "https://images.unsplash.com/photo-1574680096141-1c57c6a90dad?q=80&w=1000&auto=format&fit=crop" // Placeholder. Usuário deve subir PNG sem fundo.
   }
 };
 
@@ -29,17 +28,23 @@ export const ContentProvider: React.FC<{ children: React.ReactNode }> = ({ child
   const [isAdmin, setIsAdmin] = useState(false);
   const [isLoginModalOpen, setLoginModalOpen] = useState(false);
 
+  // Versão do conteúdo para forçar atualização
+  // Mudei para v5 para aplicar as mudanças de layout da seção Sobre
+  const CONTENT_VERSION = 'site_content_v5';
+
   // Carrega configurações salvas no navegador ao iniciar
   useEffect(() => {
-    const savedContent = localStorage.getItem('site_content');
+    const savedContent = localStorage.getItem(CONTENT_VERSION);
     if (savedContent) {
       try {
         const parsed = JSON.parse(savedContent);
-        // Merge shallowly to ensure structure consistency if fields are added later
         setContent(prev => ({...prev, ...parsed}));
       } catch (e) {
         console.error("Erro ao carregar conteúdo salvo", e);
       }
+    } else {
+      // Se não tiver salvo (ou for versão antiga), salva o novo padrão
+      localStorage.setItem(CONTENT_VERSION, JSON.stringify(defaultContent));
     }
     
     const savedAuth = localStorage.getItem('is_admin');
@@ -57,7 +62,7 @@ export const ContentProvider: React.FC<{ children: React.ReactNode }> = ({ child
       }
     };
     setContent(newContent);
-    localStorage.setItem('site_content', JSON.stringify(newContent));
+    localStorage.setItem(CONTENT_VERSION, JSON.stringify(newContent));
   };
 
   const login = (password: string) => {

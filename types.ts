@@ -30,10 +30,10 @@ export interface SiteContent {
   };
   about: {
     title: string;
+    subtitle: string;
     p1: string;
     p2: string;
-    image1: string;
-    image2: string;
+    imageMain: string;
   };
 }
 

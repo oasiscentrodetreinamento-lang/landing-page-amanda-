@@ -1,5 +1,5 @@
 import React from 'react';
-import { Instagram, Facebook, Youtube, Mail, Lock, Unlock } from 'lucide-react';
+import { Instagram, Lock, Unlock, MessageCircle } from 'lucide-react';
 import { useContent } from '../contexts/ContentContext';
 
 export const Footer: React.FC = () => {
@@ -17,14 +17,23 @@ export const Footer: React.FC = () => {
               Transformando a vida de mulheres através do movimento consciente e da saúde integrativa.
             </p>
             <div className="flex gap-4">
-              <a href="#" className="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center hover:bg-amanda-accent hover:scale-110 transition-all">
+              <a 
+                href="https://www.instagram.com/a_guimaraes_dias_?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" 
+                target="_blank"
+                rel="noreferrer"
+                className="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center hover:bg-amanda-accent hover:scale-110 transition-all"
+                aria-label="Instagram"
+              >
                 <Instagram className="w-5 h-5" />
               </a>
-              <a href="#" className="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center hover:bg-amanda-accent hover:scale-110 transition-all">
-                <Facebook className="w-5 h-5" />
-              </a>
-              <a href="#" className="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center hover:bg-amanda-accent hover:scale-110 transition-all">
-                <Youtube className="w-5 h-5" />
+              <a 
+                href="https://wa.me/553584248109" 
+                target="_blank"
+                rel="noreferrer"
+                className="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center hover:bg-amanda-accent hover:scale-110 transition-all"
+                aria-label="WhatsApp"
+              >
+                <MessageCircle className="w-5 h-5" />
               </a>
             </div>
           </div>
@@ -40,19 +49,13 @@ export const Footer: React.FC = () => {
           </div>
 
           <div>
-            <h4 className="font-bold text-xl mb-8 border-b border-gray-700 pb-2 inline-block">Contato</h4>
+            <h4 className="font-bold text-xl mb-8 border-b border-gray-700 pb-2 inline-block">Localização</h4>
             <ul className="space-y-4 text-gray-400">
-              <li className="flex items-center gap-3 group cursor-pointer hover:text-white transition-colors">
-                <div className="p-2 bg-white/5 rounded-lg group-hover:bg-amanda-accent transition-colors">
-                   <Mail className="w-4 h-4" />
-                </div>
-                contato@amandag.com.br
-              </li>
               <li className="flex items-start gap-3">
                  <div className="p-2 bg-white/5 rounded-lg mt-1">
-                   <span className="text-xs font-bold block">SP</span>
+                   <span className="text-xs font-bold block">MG</span>
                  </div>
-                 <span className="mt-1">São Paulo, Brasil<br/>Atendimento Online Global</span>
+                 <span className="mt-1">Piranguinho - MG e Região<br/>Atendimento Online Global</span>
               </li>
             </ul>
           </div>

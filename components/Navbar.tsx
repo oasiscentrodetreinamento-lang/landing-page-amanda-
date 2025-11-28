@@ -3,11 +3,18 @@ import { Menu, X, Dumbbell } from 'lucide-react';
 
 export const Navbar: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState(false);
+  const [showLogo, setShowLogo] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
+      const scrollY = window.scrollY;
+      // Ativa o fundo branco do menu logo no início
+      setIsScrolled(scrollY > 50);
+      
+      // Só mostra a logo fixa na navbar depois que a animação da Hero "termina" (aprox 400px)
+      // Isso cria a ilusão que o texto grande se encaixou ali
+      setShowLogo(scrollY > 350);
     };
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
@@ -20,14 +27,21 @@ export const Navbar: React.FC = () => {
     { name: 'Depoimentos', href: '#testimonials' },
   ];
 
+  const whatsappLink = "https://wa.me/553584248109";
+
   return (
     <nav 
-      className={`fixed w-full z-50 transition-all duration-300 ${
+      className={`fixed w-full z-50 transition-all duration-500 ${
         isScrolled ? 'bg-white/95 backdrop-blur-sm shadow-lg py-4' : 'bg-transparent py-6'
       }`}
     >
       <div className="container mx-auto px-6 flex justify-between items-center">
-        <div className={`flex items-center gap-2 font-serif font-bold text-2xl ${isScrolled ? 'text-amanda-dark' : 'text-amanda-dark md:text-white'}`}>
+        {/* Logo Area - Inicialmente invisível, aparece via Fade In */}
+        <div 
+          className={`flex items-center gap-2 font-serif font-bold text-2xl transition-opacity duration-500 ${
+            showLogo ? 'opacity-100' : 'opacity-0'
+          } ${isScrolled ? 'text-amanda-dark' : 'text-white'}`}
+        >
           <Dumbbell className="w-8 h-8 text-amanda-accent" />
           <span>Amanda G.</span>
         </div>
@@ -46,45 +60,49 @@ export const Navbar: React.FC = () => {
             </a>
           ))}
           <a 
-            href="#contact"
+            href={whatsappLink}
+            target="_blank"
+            rel="noreferrer"
             className={`px-6 py-2 rounded-full font-bold transition-all ${
               isScrolled 
                 ? 'bg-amanda-accent text-white hover:bg-rose-700' 
                 : 'bg-white text-amanda-dark hover:bg-rose-50'
             }`}
           >
-            Começar Agora
+            Falar Comigo
           </a>
         </div>
 
         {/* Mobile Menu Button */}
         <button 
-          className="md:hidden text-amanda-dark"
+          className="md:hidden text-amanda-dark z-50"
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
         >
-          {isMobileMenuOpen ? <X /> : <Menu className={isScrolled ? 'text-gray-800' : 'text-gray-800 md:text-white'} />}
+          {isMobileMenuOpen ? <X className={isScrolled ? 'text-gray-800' : 'text-white'} /> : <Menu className={isScrolled ? 'text-gray-800' : 'text-white'} />}
         </button>
       </div>
 
       {/* Mobile Menu Dropdown */}
       {isMobileMenuOpen && (
-        <div className="md:hidden absolute top-full left-0 w-full bg-white shadow-xl py-6 px-6 flex flex-col gap-4 animate-fade-in-down">
+        <div className="md:hidden absolute top-0 left-0 w-full h-screen bg-white/95 backdrop-blur-xl shadow-xl py-20 px-6 flex flex-col gap-6 animate-fade-in">
           {navLinks.map((link) => (
             <a 
               key={link.name} 
               href={link.href}
-              className="text-gray-600 font-medium text-lg border-b border-gray-100 pb-2"
+              className="text-amanda-dark font-serif text-3xl font-bold border-b border-gray-100 pb-4"
               onClick={() => setIsMobileMenuOpen(false)}
             >
               {link.name}
             </a>
           ))}
           <a 
-            href="#contact"
+            href={whatsappLink}
+            target="_blank"
+            rel="noreferrer"
             onClick={() => setIsMobileMenuOpen(false)}
-            className="text-center bg-amanda-accent text-white py-3 rounded-lg font-bold"
+            className="text-center bg-amanda-accent text-white py-4 rounded-xl font-bold text-xl mt-4"
           >
-            Começar Agora
+            Falar Comigo
           </a>
         </div>
       )}

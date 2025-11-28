@@ -5,7 +5,6 @@ import { About } from './components/About';
 import { Services } from './components/Services';
 import { Testimonials } from './components/Testimonials';
 import { Footer } from './components/Footer';
-import { ChatBot } from './components/ChatBot';
 import { ContentProvider, useContent } from './contexts/ContentContext';
 import { LoginModal } from './components/LoginModal';
 import { Download, LogOut, Check } from 'lucide-react';
@@ -70,18 +69,22 @@ function App() {
           {/* Call to Action Section Interstitial */}
           <section className="bg-amanda-accent py-20">
             <div className="container mx-auto px-6 text-center text-white">
-              <h2 className="text-3xl md:text-5xl font-serif font-bold mb-6">Pronta para começar sua jornada?</h2>
+              <h2 className="text-3xl md:text-5xl font-serif font-bold mb-6">Vamos treinar juntas?</h2>
               <p className="text-lg mb-8 max-w-2xl mx-auto opacity-90">
-                Não deixe para depois a saúde e o corpo que você merece. As vagas para consultoria deste mês são limitadas.
+                Se me ver na academia, não hesite em me chamar! Adoro ajudar e trocar ideias sobre treino e saúde.
               </p>
-              <a href="#contact" className="inline-block bg-white text-amanda-accent px-10 py-4 rounded-full font-bold text-lg hover:bg-gray-100 transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-1">
-                Quero minha vaga agora
+              <a 
+                href="https://wa.me/553584248109" 
+                target="_blank" 
+                rel="noreferrer" 
+                className="inline-block bg-white text-amanda-accent px-10 py-4 rounded-full font-bold text-lg hover:bg-gray-100 transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-1"
+              >
+                Entrar em Contato
               </a>
             </div>
           </section>
         </main>
         <Footer />
-        <ChatBot />
       </div>
     </ContentProvider>
   );
